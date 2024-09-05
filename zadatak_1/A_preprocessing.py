@@ -23,24 +23,29 @@ class DataOverview:
     def __init__(self, csv_data):
 
         df_data, self.features = self.read_csv_to_list(csv_data)
-        self.df_all_data = df_data.apply(pd.to_numeric, errors='coerce')  # transform  str -> float
+        # self.df_all_data = df_data.apply(pd.to_numeric, errors='coerce')  # transform  str -> float
 
         # self.check_missing_data() # all ok
         # self.check_data_distribution(save_diagrams=False)
-        self.make_sets()
+        # self.make_sets()
 
 
-    def read_csv_to_list(self, csv_input):
+
+    def read_csv_to_list(self, csv_input, save_to_picke=True):
+
+        print(project_path)
+
         with open(csv_input, newline='') as csvfile:
             reader = csv.reader(csvfile)
             features = next(reader)
             rows = list(reader)
         all_data_dict = {feature: [row[i] for row in rows] for i, feature in enumerate(features)}
+        all_data_df = pd.DataFrame(all_data_dict)
+
+        if save_to_picke is True:
+            all_data_df.to_pickle("all_data.pickle")
 
         return pd.DataFrame(all_data_dict), features
-
-
-
 
 
     def check_missing_data(self):
@@ -50,22 +55,19 @@ class DataOverview:
             print("DataFrame has no missing values.")
 
 
-    def check_data_distribution(self, save_diagrams=False):
+    def check_data_distribution(self):
 
-        dd_dir = os.path.join(project_path, "zadatak_1/data_distribution")
+        data_dist_dir = os.path.join(project_path, "zadatak_1/data_distribution")
 
-
-
-        if os.path.exists(dd_dir):
-            shutil.rmtree(dd_dir)
-        os.makedirs(dd_dir)  # Creates a new directory
+        if os.path.exists(data_dist_dir):
+            shutil.rmtree(data_dist_dir)
+        os.makedirs(data_dist_dir)  # Creates a new directory
 
         for feature in self.features:
-
             plt.figure()
             sns.histplot(self.df_all_data[feature], kde=True if feature != "Class" else False)
             plt.title(f'Distribution of {feature}')
-            file_path = os.path.join(dd_dir, f'{feature}_distribution.png')
+            file_path = os.path.join(data_dist_dir, f'{feature}_distribution.png')
             plt.savefig(file_path)
             plt.close()
 
@@ -90,7 +92,9 @@ class DataOverview:
 
 if __name__ == "__main__":
 
-    2
+    print(project_path)
+
+
     # DataOverview(csv_data=csv_input)
 
     # all_data_df.to_pickle("all_data.pickle")

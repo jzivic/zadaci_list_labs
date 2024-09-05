@@ -4,20 +4,10 @@ from A_preprocessing import *
 
 
 
-class Model_1(object):
+class Model_1(DataOverview):
 
     def __init__(self):
-        super(Model_1, self).__init__()
-
-        3
-
-
-
-
-
-
-
-
+        super().__init__(self)
 
 
 
@@ -26,10 +16,11 @@ class Model_1(object):
 
 
 if __name__ == "__main__":
-    DataOverview(csv_data=csv_input)
 
-    # all_data_df.to_pickle("all_data.pickle")
+    # DataOverview(csv_data=csv_input)
 
+
+    print(project_path)
 
 
 
