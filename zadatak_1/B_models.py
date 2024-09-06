@@ -7,8 +7,10 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 
 
+
 model_acc_dir = os.path.abspath(os.path.join(project_path, "../zadatak_1/output/model_acc_valid_1/"))
 os.makedirs(model_acc_dir, exist_ok=True)
+
 
 
 
@@ -23,7 +25,7 @@ class Models(DataOverview):
 
 
 
-    def draw_calc_matrix(self, y_true, y_pred, model_name):
+    def draw_calc_matrix(self, y_true, y_pred, model_name, path):
 
         accuracy = accuracy_score(y_true, y_pred)
         precision = precision_score(y_true, y_pred, average='weighted')
@@ -72,6 +74,7 @@ class Models(DataOverview):
         random_forest_model = RandomForestClassifier(n_estimators=100)
         random_forest_model.fit(self.X_train, self.y_train)
         y_pred = random_forest_model.predict(self.X_validation)
+
         if draw_matrix is True:
             self.draw_calc_matrix(self.y_validation, y_pred, "rand_forest")
 
@@ -86,7 +89,6 @@ class Models(DataOverview):
         if draw_matrix is True:
             self.draw_calc_matrix(self.y_validation, y_pred, "gaussian_NB")
 
-
         return gaussian_model
 
 
@@ -98,7 +100,6 @@ class Models(DataOverview):
 
 
 if __name__ == "__main__":
-
     Models(csv_data=csv_input)
 
 
