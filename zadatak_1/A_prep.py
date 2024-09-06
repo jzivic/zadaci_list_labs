@@ -33,9 +33,6 @@ class DataOverview:
         (self.X_train, self.X_test, self.X_validation,
          self.y_train, self.y_test, self.y_validation) = self.make_data_sets()
 
-        print(len(self.X_train), len(self.X_test), len(self.X_validation))
-
-
 
 
     def read_csv_to_list(self, csv_input, save_to_pickle=True):
@@ -71,9 +68,9 @@ class DataOverview:
                 plt.figure()
                 sns.histplot(self.df_all_data[feature], kde=True if feature != "Class" else False)
                 plt.title(f'Distribution of {feature}')
-                file_path = os.path.join(data_dist_dir, f'{feature}_distribution.png')
+                distribution_dir_path = os.path.join(data_dist_dir, f'{feature}_distribution.png')
 
-                plt.savefig(file_path)
+                plt.savefig(distribution_dir_path)
                 plt.close()
 
 
