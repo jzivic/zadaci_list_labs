@@ -25,9 +25,9 @@ class Models(DataOverview):
 
     def set_model_acc_dir(self, mode):
         if mode == "validation":
-            self.model_acc_dir = os.path.abspath(os.path.join(project_path, "../zadatak_1/output/model_acc_valid_1/"))
+            self.model_acc_dir = os.path.abspath(os.path.join(project_path, "../zadatak_3/output/model_acc_valid_1/"))
         elif mode == "test":
-            self.model_acc_dir = os.path.abspath(os.path.join(project_path, "../zadatak_1/output/model_acc_test_1/"))
+            self.model_acc_dir = os.path.abspath(os.path.join(project_path, "../zadatak_3/output/model_acc_test_1/"))
         os.makedirs(self.model_acc_dir, exist_ok=True)
 
 

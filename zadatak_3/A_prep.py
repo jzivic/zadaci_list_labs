@@ -57,7 +57,7 @@ class DataOverview:
 
 
     def check_data_distribution(self, save_diagrams=False):
-        data_dist_dir = os.path.abspath(os.path.join(project_path, "../zadatak_1/output/data_distribution"))
+        data_dist_dir = os.path.abspath(os.path.join(project_path, "../zadatak_3/output/data_distribution"))
 
         if os.path.exists(data_dist_dir):
             shutil.rmtree(data_dist_dir)
