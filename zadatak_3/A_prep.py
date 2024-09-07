@@ -2,6 +2,7 @@ import csv
 import pandas as pd
 import os
 import shutil
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -119,9 +120,23 @@ class DataOverview:
         sns.heatmap(cm_normalized, annot=True, fmt='.2%', cmap='YlGnBu', xticklabels=class_labels,
                 yticklabels=class_labels)
         plt.savefig(file_path, dpi=300, bbox_inches='tight')
-        plt.show()
+        # plt.show()
 
         return accuracy, precision, recall, f1, cm, cm_normalized
+
+
+    @staticmethod
+    def calc_timing(arg):
+        def decorator(func):
+            def wrapper(*args, **kwargs):
+                start_time = time.time()
+                result = func(*args, **kwargs)  # Call the actual function
+                elapsed_time = round(time.time() - start_time, 2)
+                print(f"{arg.upper()} time: {elapsed_time} seconds")
+                return result  # Return the result of the wrapped function
+            return wrapper
+        return decorator
+
 
 
 

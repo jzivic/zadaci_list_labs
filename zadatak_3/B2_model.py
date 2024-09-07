@@ -19,28 +19,20 @@ class Model_2(DataOverview):
         super().__init__(csv_data)
 
         self.set_model_acc_dir(mode)
-
         self.svm()
 
 
-
-
-
+    @DataOverview.calc_timing("svm")
     def svm(self):
         best_grid_acc = []  # index coordinates for best acc in grid search
         accuracity_matrix = {}  # matrix for saving acc
         best_acc = {"fpr": 100, "tpr": 0}  # acc initiation
 
-        start_time = time.time()
         svcModel = SVC(kernel="rbf")
         svcModel.fit(self.X_train, self.y_train)
         y_pred = svcModel.predict(self.X_validation)
-        elapsed_time = round(time.time() - start_time, 2)
-        print(f"Time: : {elapsed_time} seconds")
 
-        self.draw_calc_matrix(self.y_validation, y_pred, "dec_tree")
-
-
+        self.draw_calc_matrix(self.y_validation, y_pred, "svm")
 
 
 

@@ -14,10 +14,10 @@ class Models(DataOverview):
 
         self.set_model_acc_dir(mode)
         self.model_dt = self.decision_tree_f()
-        # self.model_rf = self.random_forest_f()
-        # self.model_gnb = self.gaussian_NB_f()
+        self.model_rf = self.random_forest_f()
+        self.model_gnb = self.gaussian_NB_f()
 
-
+    @DataOverview.calc_timing
     def decision_tree_f(self, draw_matrix=True):
         decision_tree_model = DecisionTreeClassifier(random_state=24)
         decision_tree_model.fit(self.X_train, self.y_train)
@@ -28,7 +28,7 @@ class Models(DataOverview):
 
         return decision_tree_model
 
-
+    @DataOverview.calc_timing
     def random_forest_f(self, draw_matrix=True):
         random_forest_model = RandomForestClassifier(n_estimators=100)
         random_forest_model.fit(self.X_train, self.y_train)
@@ -39,7 +39,7 @@ class Models(DataOverview):
 
         return random_forest_model
 
-
+    @DataOverview.calc_timing
     def gaussian_NB_f(self, draw_matrix=True):
         gaussian_model = GaussianNB()
         gaussian_model.fit(self.X_train, self.y_train)
