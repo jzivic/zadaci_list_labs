@@ -1,3 +1,8 @@
-requests
-geopandas
+pandas
 numpy
+matplotlib
+seaborn
+scikit-learn
+
+
+

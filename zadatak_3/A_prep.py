@@ -2,21 +2,15 @@ import csv
 import pandas as pd
 import os
 import shutil
-
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix
-
-
-
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
 
 project_path = os.getcwd()
 csv_input = os.path.abspath(os.path.join(project_path, "../data/training_data.csv"))
-
-
 
 
 
@@ -86,6 +80,48 @@ class DataOverview:
         return X_train, X_test, X_validation, y_train, y_test, y_validation
 
 
+    def set_model_acc_dir(self, mode):
+        if mode == "validation":
+            self.model_acc_dir = os.path.abspath(os.path.join(project_path, "../zadatak_3/output/model_acc_valid_1/"))
+        elif mode == "test":
+            self.model_acc_dir = os.path.abspath(os.path.join(project_path, "../zadatak_3/output/model_acc_test_1/"))
+        os.makedirs(self.model_acc_dir, exist_ok=True)
+
+
+
+    # for post processing
+    def draw_calc_matrix(self, y_true, y_pred, model_name):
+
+        accuracy = accuracy_score(y_true, y_pred)
+        precision = precision_score(y_true, y_pred, average='weighted')
+        recall = recall_score(y_true, y_pred, average='weighted')
+        f1 = f1_score(y_true, y_pred, average='weighted')
+        cm = confusion_matrix(y_true, y_pred)
+        cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+
+        # print(f"Model: {model_name}")
+        # print(f"accuracy: {accuracy}")
+        # print(f"precision: {precision}")
+        # print(f"recall: {recall}")
+        # print(f"f1: {f1}")
+        # print(f"cm: {cm}")
+        # print(f"cm_normalized: {cm_normalized}")
+
+        class_labels = ['Class 0', 'Class 1', 'Class 2']  # or use the actual labels of your classes
+        plt.ylabel('Prediction', fontsize=12)
+        plt.xlabel('True', fontsize=12)
+        plt.title('Confusion Matrix', fontsize=16)
+        plt.title(f"Confusion Matrix: {model_name}", fontsize=16)
+
+        file_path = os.path.join(self.model_acc_dir, f"CM_{model_name}.png")
+
+
+        sns.heatmap(cm_normalized, annot=True, fmt='.2%', cmap='YlGnBu', xticklabels=class_labels,
+                yticklabels=class_labels)
+        plt.savefig(file_path, dpi=300, bbox_inches='tight')
+        plt.show()
+
+        return accuracy, precision, recall, f1, cm, cm_normalized
 
 
 
