@@ -72,7 +72,6 @@ class DataOverview:
     def make_data_sets(self):
         y_data = self.df_all_data["Class"]
         X_data = self.df_all_data.drop(columns=["Class"])
-
         X_train, X_temp, y_train, y_temp = train_test_split(X_data, y_data,
                     test_size=0.3, random_state=42, stratify=y_data)
         X_validation, X_test, y_validation, y_test = train_test_split(X_temp, y_temp,
@@ -90,7 +89,7 @@ class DataOverview:
 
 
 
-    # for post processing
+    # for post-processing
     def draw_calc_matrix(self, y_true, y_pred, model_name):
 
         accuracy = accuracy_score(y_true, y_pred)
@@ -101,7 +100,7 @@ class DataOverview:
         cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
 
         # print(f"Model: {model_name}")
-        # print(f"accuracy: {accuracy}")
+        print(f"accuracy: {accuracy}")
         # print(f"precision: {precision}")
         # print(f"recall: {recall}")
         # print(f"f1: {f1}")
@@ -115,7 +114,6 @@ class DataOverview:
         plt.title(f"Confusion Matrix: {model_name}", fontsize=16)
 
         file_path = os.path.join(self.model_acc_dir, f"CM_{model_name}.png")
-
 
         sns.heatmap(cm_normalized, annot=True, fmt='.2%', cmap='YlGnBu', xticklabels=class_labels,
                 yticklabels=class_labels)
