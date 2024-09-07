@@ -1,13 +1,4 @@
-import time
-from A_prep import *
-from B_models import *
-
-
-
-C_f = lambda n: 2 ** n
-gamma_f = lambda n: 2 ** n
-
-
+from B_1_models import *
 
 
 class Model_Tuning(Models):
