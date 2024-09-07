@@ -118,7 +118,7 @@ class DataOverview:
         sns.heatmap(cm_normalized, annot=True, fmt='.2%', cmap='YlGnBu', xticklabels=class_labels,
                 yticklabels=class_labels)
         plt.savefig(file_path, dpi=300, bbox_inches='tight')
-        # plt.show()
+        plt.show()
 
         return accuracy, precision, recall, f1, cm, cm_normalized
 

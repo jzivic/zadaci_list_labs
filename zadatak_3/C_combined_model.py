@@ -16,9 +16,12 @@ class CombinedModel(Models):
         y_dt = self.model_dt.predict(self.X_test).tolist()
         y_rf = self.model_rf.predict(self.X_test).tolist()
         y_gnb = self.model_gnb.predict(self.X_test).tolist()
-        avg_prediction = list(map(lambda x: Counter(x).most_common(1)[0][0], zip(y_dt, y_rf, y_gnb)))
+        y_svm = self.model_gnb.predict(self.X_test).tolist()
+        y_knn = self.model_gnb.predict(self.X_test).tolist()
+        avg_prediction = list(map(lambda x: Counter(x).most_common(1)[0][0], zip(y_dt, y_rf, y_gnb, y_svm, y_knn)))
 
         self.draw_calc_matrix(avg_prediction, self.y_test, "Combined_model")
+
 
 
 

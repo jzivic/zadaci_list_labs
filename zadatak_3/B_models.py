@@ -15,14 +15,15 @@ class Models(DataOverview):
     def __init__(self, csv_data, mode="validation"):
         super().__init__(csv_data)
 
-        # self.set_model_acc_dir(mode)
-        # self.model_dt = self.decision_tree_f()
-        # self.model_rf = self.random_forest_f()
-        # self.model_gnb = self.gaussian_NB_f()
+        self.set_model_acc_dir(mode)
+
+        self.model_dt = self.decision_tree_f()
+        self.model_rf = self.random_forest_f()
+        self.model_gnb = self.gaussian_NB_f()
+        self.model_svm = self.svm_f(c=1e4)
+        self.model_knn = self.knn_f(n_neighbors=5)
 
 
-
-        self.model_knn = self.knn_f()
 
 
 
@@ -60,9 +61,20 @@ class Models(DataOverview):
         return gaussian_model
 
 
+    @DataOverview.calc_timing("svm")
+    def svm_f(self, c, gamma="scale", draw_matrix=True):
+        svm_model = SVC(C=c, kernel="rbf", gamma=gamma)
+        svm_model.fit(self.X_train, self.y_train)
+        y_pred = svm_model.predict(self.X_validation)
+        if draw_matrix is True:
+            self.draw_calc_matrix(self.y_validation, y_pred, "svm")
+
+        return svm_model
+
+
     @DataOverview.calc_timing("knn")
-    def knn_f(self, draw_matrix=True):
-        knn_model = KNeighborsClassifier(n_neighbors=5)
+    def knn_f(self, n_neighbors, draw_matrix=True):
+        knn_model = KNeighborsClassifier(n_neighbors=n_neighbors)
         knn_model.fit(self.X_train, self.y_train)
         y_pred = knn_model.predict(self.X_validation)
 
@@ -72,15 +84,6 @@ class Models(DataOverview):
         return knn_model
 
 
-    @DataOverview.calc_timing("svm")
-    def svm(self, c, gamma="scale", draw_matrix=True):
-        svm_model = SVC(C=c, kernel="rbf", gamma=gamma)
-        svm_model.fit(self.X_train, self.y_train)
-        y_pred = svm_model.predict(self.X_validation)
-        if draw_matrix is True:
-            self.draw_calc_matrix(self.y_validation, y_pred, "scm")
-
-        return svm_model
 
 
 
