@@ -7,7 +7,7 @@ class Model_Tuning(Models):
         super().__init__(csv_data)
 
         self.set_model_acc_dir(mode)
-        # self.svc_tuning()
+        self.svc_tuning()
         # self.knn_tuning()
 
 

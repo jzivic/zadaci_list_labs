@@ -15,16 +15,18 @@ project_path = os.getcwd()
 # data file
 csv_input = os.path.abspath(os.path.join(project_path, "../data/training_data.csv"))
 
-#  csv file to store the models comparisson
+#  csv file to store the models comparison
 csv_compare_models = os.path.abspath(os.path.join(project_path, "../zadatak_3/output/model_compaison.csv"))
+
+# csv file to store model acc
+csv_model_metrics = os.path.abspath(os.path.join(project_path, "../zadatak_3/output/model_metrics.xlsx"))
 
 
 class DataOverview:
     def __init__(self, csv_data):
 
 
-        # store data on the accuracy of all models
-        self.models_data = []
+        self.models_data = []    #  data on the accuracy of all models
 
         df_data, self.features = self.read_csv_to_list(csv_data)
 
@@ -40,7 +42,6 @@ class DataOverview:
 
 
 
-
     # data input to feed the data from csv file
     def read_csv_to_list(self, csv_input, save_to_pickle=True):
         with open(csv_input, newline='') as csvfile:
@@ -51,7 +52,8 @@ class DataOverview:
         all_data_df = pd.DataFrame(all_data_dict)
 
         if save_to_pickle is True:
-            all_data_df.to_pickle("all_data.pickle")
+            pickle_path = os.path.abspath(os.path.join(project_path, "../zadatak_3/output/all_data.csv"))
+            all_data_df.to_pickle(pickle_path)
 
         return pd.DataFrame(all_data_dict), features
 
@@ -63,12 +65,13 @@ class DataOverview:
         else:
             print("DataFrame has no missing values.")
 
+        # number of instances in classes
         n_c = lambda c: len(self.df_all_data[self.df_all_data['Class'] == c ])
         n_class_0, n_class_1, n_class_2  = n_c(0), n_c(1), n_c(2)
         print(n_class_0, n_class_1, n_class_2)
 
 
-    # plot histograms for every feature
+    # plot histograms for every feature to check data distribution
     def plot_data_distribution(self):
         data_dist_dir = os.path.abspath(os.path.join(project_path, "../zadatak_3/output/data_distribution"))
 
@@ -98,7 +101,7 @@ class DataOverview:
         return X_train, X_test, X_validation, y_train, y_test, y_validation
 
 
-    # function to create two separate directories, depending on whether it is for the validation or test data set
+    # create two separate directories, depending on whether it is for the validation or test data set
     def set_model_acc_dir(self, mode):
         if mode == "validation":
             self.model_acc_dir = os.path.abspath(os.path.join(project_path, "../zadatak_3/output/model_acc_valid/"))
@@ -107,7 +110,7 @@ class DataOverview:
         os.makedirs(self.model_acc_dir, exist_ok=True)
 
 
-    # for post-processing, to compare accuracy, plot confusion matrix
+    # for post-processing, compare accuracy, plot confusion matrix
     def draw_calc_matrix(self, y_true, y_pred, model_name):
         accuracy = round(accuracy_score(y_true, y_pred), 4)
         precision = round(precision_score(y_true, y_pred, average='weighted'), 4)
@@ -127,7 +130,7 @@ class DataOverview:
                 yticklabels=class_labels)
         plt.savefig(file_path, dpi=300, bbox_inches='tight')
 
-        # This has to be turned on for ploting diagrams:
+        # turn on for plotting diagrams, but interfere with model training time measurement
         plt.show()
 
         model_metrics = {
@@ -143,12 +146,12 @@ class DataOverview:
         return model_metrics
 
 
-    def save_results_to_excel(self, file_name="output/model_metrics.xlsx"):
+    def save_results_to_excel(self, file_name=csv_model_metrics):
         df = pd.DataFrame(self.models_data)
         df.to_excel(file_name, index=False)
         # print(f"Results saved to {file_name}")
 
-    # calculate time for training every model. Plotting matrices impacts the time, so turn off when measuring time
+    # calculate time for training model. Plotting matrices impacts the time, so turn it off when measuring time
     @staticmethod
     def calc_timing(arg):
         def decorator(func):

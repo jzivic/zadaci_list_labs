@@ -17,7 +17,12 @@ class Models(DataOverview):
         self.model_gnb = self.gaussian_NB_f()
         self.model_svm = self.svm_f(c=1e4)
         self.model_knn = self.knn_f(n_neighbors=5)
-        self.save_results_to_excel("/output/model_metrics.xlsx")
+        self.save_results_to_excel()
+
+
+
+        # self.save_results_to_excel("zadatak_3/output/model_metrics.xlsx")
+
 
 
     @DataOverview.calc_timing("dc")
