@@ -1,6 +1,8 @@
 import os
 import rasterio
-import numpy as np
+import matplotlib.pyplot as plt
+
+
 
 
 # Path to your TIFF file
@@ -11,35 +13,19 @@ tiff_file = os.path.abspath(os.path.join(project_path, "../data/response_bands.t
 
 # Open the TIFF file and print its metadata
 with rasterio.open(tiff_file) as src:
-    # # Print metadata
-    # print("Metadata:")
-    # print(src.meta)
-    #
-    # # Get the number of bands
-    # print(f"\nNumber of bands: {src.count}")
-    #
-    # # Print the dimensions (width, height)
-    # print(f"Width: {src.width}, Height: {src.height}")
-    #
-    # # Get the coordinate reference system (CRS)
-    # print(f"CRS: {src.crs}")
-    #
-    # # Get the affine transformation (geospatial transformation matrix)
-    # print(f"Transform: {src.transform}")
 
 
-
-
-    # Print overviews for each band
     for i in range(1, src.count + 1):
-        # print(f"\nBand {i}:")
-        print(f" - Min Value: {src.read(i).min()}")
-        print(f" - Max Value: {src.read(i).max()}")
-        print(f" - Data Type: {src.dtypes[i - 1]}")
 
-        a = np.mean(src.read(i))
+        slika = src.read(i).astype('float32')
 
-        print(a)
+
+        plt.figure(figsize=(10, 6))
+        plt.imshow(slika, cmap='RdYlGn', vmin=-1, vmax=1)
+        plt.colorbar(label=str(i))
+
+        plt.show()
+
 
 
 

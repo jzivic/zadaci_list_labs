@@ -11,7 +11,7 @@ class Model_Tuning(Models):
         # self.knn_tuning()
 
 
-    # after examination, C does not have significant impact and model times are similar. C=1e4
+    # after examination, C does not have significant impact and training times are similar. C=1e4
     def svc_tuning(self):
         for c in range(1,20000,1000):
             self.svm_f(c)

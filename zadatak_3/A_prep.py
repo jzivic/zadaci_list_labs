@@ -12,7 +12,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 project_path = os.getcwd()
 
-# data file
+# input data file
 csv_input = os.path.abspath(os.path.join(project_path, "../data/training_data.csv"))
 
 #  csv file to store the models comparison
@@ -25,12 +25,10 @@ csv_model_metrics = os.path.abspath(os.path.join(project_path, "../zadatak_3/out
 class DataOverview:
     def __init__(self, csv_data):
 
-
         self.models_data = []    #  data on the accuracy of all models
 
         df_data, self.features = self.read_csv_to_list(csv_data)
 
-        # shuffle data just to be sure
         df_shuffled = df_data.sample(frac=1, random_state=None).reset_index(drop=True)
         self.df_all_data = df_shuffled.apply(pd.to_numeric, errors='coerce')  # transform  str -> float
 
@@ -110,6 +108,8 @@ class DataOverview:
         os.makedirs(self.model_acc_dir, exist_ok=True)
 
 
+    # functions used in B and C scripts:
+
     # for post-processing, compare accuracy, plot confusion matrix
     def draw_calc_matrix(self, y_true, y_pred, model_name):
         accuracy = round(accuracy_score(y_true, y_pred), 4)
@@ -149,9 +149,9 @@ class DataOverview:
     def save_results_to_excel(self, file_name=csv_model_metrics):
         df = pd.DataFrame(self.models_data)
         df.to_excel(file_name, index=False)
-        # print(f"Results saved to {file_name}")
+        print(f"Results saved to {file_name}")
 
-    # calculate time for training model. Plotting matrices impacts the time, so turn it off when measuring time
+    # calculate time for model training. Plotting matrices impacts the time, so turn it off when measuring time
     @staticmethod
     def calc_timing(arg):
         def decorator(func):
