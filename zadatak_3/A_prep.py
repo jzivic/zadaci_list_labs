@@ -50,7 +50,7 @@ class DataOverview:
         all_data_df = pd.DataFrame(all_data_dict)
 
         if save_to_pickle is True:
-            pickle_path = os.path.abspath(os.path.join(project_path, "../zadatak_3/output/all_data.csv"))
+            pickle_path = os.path.abspath(os.path.join(project_path, "../zadatak_3/output/all_data.pickle"))
             all_data_df.to_pickle(pickle_path)
 
         return pd.DataFrame(all_data_dict), features
