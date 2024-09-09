@@ -34,8 +34,8 @@ class DataOverview:
         df_shuffled = df_data.sample(frac=1, random_state=None).reset_index(drop=True)
         self.df_all_data = df_shuffled.apply(pd.to_numeric, errors='coerce')  # transform  str -> float
 
-        # self.check_missing_data()
-        # self.plot_data_distribution()
+        self.check_missing_data()
+        self.plot_data_distribution()
 
         (self.X_train, self.X_test, self.X_validation,
          self.y_train, self.y_test, self.y_validation) = self.make_data_sets()

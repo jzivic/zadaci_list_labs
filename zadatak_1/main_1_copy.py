@@ -5,6 +5,7 @@ import numpy as np
 
 
 
+# NIR = Near-Infrared
 
 project_path = os.getcwd()
 tiff_input = os.path.abspath(os.path.join(project_path, "../data/response_bands.tiff"))
@@ -16,11 +17,10 @@ class SatelitskaSnimka:
     def __init__(self, tiff_file=tiff_input):
 
         self.src = rasterio.open(tiff_file)
-        # self.get_overview()
-        self.quants = self.get_quants()
+        self.get_overview()
+        # self.calculate_NDVI(*self.get_ndmi_vars())
 
-        self.calculate_NDVI(self.quants["NIR"], self.quants["red"])
-        self.calculate_NDMI(self.quants["NIR"], self.quants["SWIR"])
+
 
         print(f"Satelitska snimka sadrži {self.src.count} kanala.")
 
@@ -44,12 +44,27 @@ class SatelitskaSnimka:
         return overview
 
 
-    def get_quants(self):
-        NIR = self.src.read(8).astype('float32')
-        red = self.src.read(4).astype('float32')
-        SWIR = self.src.read(12).astype('float32')
 
-        return {"NIR":NIR, "red":red, "SWIR":SWIR}
+
+
+
+
+
+    def get_ndvi_vars(self):
+        NIR = self.src.read(8).astype('float32')
+        red_band = self.src.read(4).astype('float32')
+
+        return NIR, red_band
+
+
+    def get_ndmi_vars(self):
+        NIR = self.src.read(8).astype('float32')
+        SWIR = self.src.read(11).astype('float32')
+
+        return NIR, SWIR
+
+
+
 
 
     def calculate_NDVI(self, NIR_band, red_band):
@@ -62,8 +77,7 @@ class SatelitskaSnimka:
         plt.imshow(ndvi, cmap='RdYlGn', vmin=-1, vmax=1)
         plt.colorbar(label='NDVI Value')
         plt.title('NDVI Calculation')
-        plt.savefig("ndvi.png")
-        plt.show()
+        # plt.show()
 
         output_file_path = os.path.abspath(os.path.join(project_path, "ndvi_output.tiff"))
         self.save_as_tiff(ndvi, output_file_path)
@@ -72,20 +86,19 @@ class SatelitskaSnimka:
 
 
 
-    def calculate_NDMI(self, NIR_band, SWIR):
+    def calculate_NDMI(self, NIR_band, red_band):
 
-        ndmi = np.where((NIR_band + SWIR) == 0, 0, (NIR_band - SWIR) / (NIR_band + SWIR))
+        ndmi = np.where((NIR_band + red_band) == 0, 0, (NIR_band - red_band) / (NIR_band + red_band))
         ndmi_avg = str(round(np.average(ndmi),4))
         print(f"Satelitska snimka sadrži {ndmi_avg} kanala.")
 
         plt.figure(figsize=(10, 6))
         plt.imshow(ndmi, cmap='RdYlGn', vmin=-1, vmax=1)
-        plt.colorbar(label='NDMI Value')
-        plt.title('NDMI Calculation')
-        plt.savefig("ndmi.png")
-        plt.show()
+        plt.colorbar(label='NDVI Value')
+        plt.title('NDVI Calculation')
+        # plt.show()
 
-        output_file_path = os.path.abspath(os.path.join(project_path, "ndmi_output.tiff"))
+        output_file_path = os.path.abspath(os.path.join(project_path, "ndvi_output.tiff"))
         self.save_as_tiff(ndmi, output_file_path)
 
         return ndmi
@@ -107,7 +120,7 @@ class SatelitskaSnimka:
         ) as dst:
             dst.write(quantity, 1)
 
-        print(f"tiff saved to {output_file_path}")
+        print(f"NDVI saved to {output_file_path}")
 
 
 
