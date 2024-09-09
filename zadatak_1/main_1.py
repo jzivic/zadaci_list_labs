@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-
-
 project_path = os.getcwd()
 tiff_input = os.path.abspath(os.path.join(project_path, "../data/response_bands.tiff"))
 
@@ -16,15 +14,13 @@ class SatelitskaSnimka:
     def __init__(self, tiff_file=tiff_input):
 
         self.src = rasterio.open(tiff_file)
-        # self.get_overview()
+        self.get_overview()
         self.quants = self.get_quants()
 
         self.calculate_NDVI(self.quants["NIR"], self.quants["red"])
         self.calculate_NDMI(self.quants["NIR"], self.quants["SWIR"])
 
         print(f"Satelitska snimka sadrži {self.src.count} kanala.")
-
-
 
 
 
@@ -53,10 +49,9 @@ class SatelitskaSnimka:
 
 
     def calculate_NDVI(self, NIR_band, red_band):
-
         ndvi = np.where((NIR_band + red_band) == 0, 0, (NIR_band - red_band) / (NIR_band + red_band))
         ndvi_avg = str(round(np.average(ndvi),4))
-        print(f"Satelitska snimka sadrži {ndvi_avg} kanala.")
+        print(f"The average value of the NDVI band is: {ndvi_avg}.")
 
         plt.figure(figsize=(10, 6))
         plt.imshow(ndvi, cmap='RdYlGn', vmin=-1, vmax=1)
@@ -73,10 +68,9 @@ class SatelitskaSnimka:
 
 
     def calculate_NDMI(self, NIR_band, SWIR):
-
         ndmi = np.where((NIR_band + SWIR) == 0, 0, (NIR_band - SWIR) / (NIR_band + SWIR))
         ndmi_avg = str(round(np.average(ndmi),4))
-        print(f"Satelitska snimka sadrži {ndmi_avg} kanala.")
+        print(f"The average value of the NDMI band is: {ndmi_avg}")
 
         plt.figure(figsize=(10, 6))
         plt.imshow(ndmi, cmap='RdYlGn', vmin=-1, vmax=1)
